@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eskişehir</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Porsuk'un iki yakasındaki şehirden Frig Vadisi'ne, kaydırarak bir Eskişehir rotası.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=Hanken+Grotesk:wght@400;500&display=swap">
+<style>
+/* Layout: two films in a row. The drone flight over the Porsuk is scrubbed by scrolling, then the
+   same gesture carries on through a route of photographs that leads out of the city, stop by stop,
+   to the Phrygian rocks. After that the page settles into a quiet, left-aligned book.
+   Colour comes from the footage: river mist for paper, Porsuk slate-teal, one sunset apricot. */
+:root{
+  --mist:#e4e7e2;
+  --mist-2:#d8ddd7;
+  --ink:#1b2426;
+  --ink-soft:#56615f;
+  --line:rgba(27,36,38,.14);
+  --river:#2f5f66;
+  --sun:#c97a36;
+  --film-fg:#f7f1e8;
+  --display:"Newsreader","Iowan Old Style",Georgia,serif;
+  --body:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
+  --gutter:max(20px,5vw);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --mist:#121819; --mist-2:#1a2224; --ink:#e7ebe6; --ink-soft:#9eaaa7;
+  --line:rgba(231,235,230,.14); --river:#86b9bd; --sun:#eba566; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --mist:#121819; --mist-2:#1a2224; --ink:#e7ebe6; --ink-soft:#9eaaa7;
+  --line:rgba(231,235,230,.14); --river:#86b9bd; --sun:#eba566; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--mist);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:#141a1b}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--sun);outline-offset:3px;border-radius:2px}
+.wrap{padding-left:max(var(--gutter),env(safe-area-inset-left,0px));padding-right:max(var(--gutter),env(safe-area-inset-right,0px))}
+.note{font-family:var(--display);font-style:italic;font-size:17px;color:var(--ink-soft)}
+
+/* header */
+.top{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding-block:16px;color:var(--film-fg);transition:color .4s,background-color .4s}
+.top.paper{color:var(--ink);background:color-mix(in srgb,var(--mist) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-size:23px;letter-spacing:-.01em}
+.brand svg{width:30px;height:20px}
+.chapter{font-family:var(--display);font-style:italic;font-size:16px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.pill{text-decoration:none;border:1px solid currentColor;border-radius:999px;padding:7px 18px;font-size:15px;font-weight:500;transition:background-color .2s,color .2s;white-space:nowrap}
+.pill:hover{background:var(--film-fg);color:#141a1b}
+.top.paper .pill:hover{background:var(--ink);color:var(--mist)}
+
+/* shared film stage */
+.film{position:relative;background:#141a1b}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;color:var(--film-fg)}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(180deg,rgba(20,26,27,.45) 0%,rgba(20,26,27,0) 24%,rgba(20,26,27,.05) 40%,rgba(20,26,27,.86) 100%)}
+.caps{position:absolute;inset:0;z-index:2;display:grid;align-items:end;padding-bottom:max(15vh,104px)}
+.cap{grid-area:1/1;will-change:opacity,transform;text-shadow:0 1px 28px rgba(10,14,15,.35)}
+.cap h1,.cap h2{font-family:var(--display);font-weight:300;font-size:clamp(40px,8.4vw,128px);line-height:.96;letter-spacing:-.028em;margin:0;text-wrap:balance;max-width:12ch}
+.cap h1{font-size:clamp(64px,15vw,230px);letter-spacing:-.04em}
+.cap p{margin:20px 0 0;max-width:36ch;font-size:clamp(17px,1.5vw,21px);line-height:1.45;opacity:.92}
+.cap p em{font-family:var(--display);font-size:1.12em}
+.cap .when{display:block;margin-bottom:14px;font-family:var(--display);font-style:italic;font-size:19px;opacity:.85}
+.hud{position:absolute;z-index:3;left:0;right:0;bottom:0;display:flex;align-items:center;gap:20px;padding-block:20px calc(20px + env(safe-area-inset-bottom,0px));font-size:13px}
+.tc{font-variant-numeric:tabular-nums;opacity:.85;min-width:9ch}
+.track{flex:1;max-width:360px;height:2px;background:rgba(247,241,232,.22);border-radius:2px;overflow:hidden}
+.track b{display:block;height:100%;width:100%;background:var(--film-fg);transform-origin:left;transform:scaleX(0)}
+.load{margin-left:auto;opacity:.75}
+
+/* film 1: drone */
+#giris{height:520vh}
+#giris .stage{background:#2a2a28 url(poster.jpg) center/cover no-repeat}
+#giris canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* film 2: route of photographs */
+#rota{height:calc(var(--n) * 105vh + 60vh)}
+.slide{position:absolute;inset:0;margin:0}
+.slide::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(20,26,27,.4) 0%,rgba(20,26,27,0) 22%,rgba(20,26,27,.08) 42%,rgba(20,26,27,.84) 100%)}
+.slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 60%;will-change:transform,opacity}
+.slide figcaption{text-shadow:0 1px 28px rgba(10,14,15,.45);position:absolute;z-index:2;left:0;right:0;bottom:0;padding-bottom:max(13vh,96px);will-change:opacity,transform}
+.slide .where{display:block;font-family:var(--display);font-style:italic;font-size:19px;opacity:.88;margin-bottom:10px}
+.slide h3{font-family:var(--display);font-weight:300;font-size:clamp(40px,7.2vw,112px);line-height:.98;letter-spacing:-.025em;margin:0;max-width:13ch;text-wrap:balance}
+.slide p{margin:18px 0 0;max-width:42ch;font-size:clamp(16px,1.4vw,19px);line-height:1.5;opacity:.92}
+.slide .credit{position:absolute;z-index:2;right:max(var(--gutter),env(safe-area-inset-right,0px));top:calc(76px + env(safe-area-inset-top,0px));font-size:12px;opacity:.6;max-width:40ch;text-align:right}
+.stops{position:absolute;z-index:3;right:max(var(--gutter),env(safe-area-inset-right,0px));bottom:max(13vh,96px);list-style:none;margin:0;padding:0;display:grid;gap:6px;text-align:right;font-size:14px}
+.stops li{opacity:.45;transition:opacity .3s,transform .3s;font-variant-numeric:tabular-nums}
+.stops li.on{opacity:1;transform:translateX(-6px)}
+.stops li span{opacity:.7;margin-right:8px}
+
+/* book */
+.ch{padding-block:clamp(88px,13vw,176px)}
+.ch + .ch{border-top:1px solid var(--line)}
+.ch-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:24px;align-items:baseline;margin-bottom:clamp(40px,6vw,88px)}
+.ch-head h2{font-family:var(--display);font-weight:300;font-size:clamp(40px,5.8vw,88px);line-height:1.02;letter-spacing:-.022em;margin:0;text-wrap:balance;max-width:15ch}
+.ch-head h2 em{color:var(--ink-soft)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:24px}
+.lede{font-family:var(--display);font-size:clamp(22px,2.1vw,28px);line-height:1.42;max-width:34ch;margin:0 0 28px;font-weight:300}
+.prose{max-width:60ch;color:var(--ink-soft);margin:0}
+
+.facts{margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(24px,5vw,72px)}
+.facts div{padding:22px 0 26px;border-top:1px solid var(--line)}
+.facts dt{font-family:var(--display);font-weight:300;font-size:clamp(46px,6vw,92px);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.facts dt small{font-size:.38em;letter-spacing:0;color:var(--ink-soft);margin-left:.15em}
+.facts dd{margin:10px 0 0;color:var(--ink-soft);max-width:36ch}
+.facts .hi dt{color:var(--sun)}
+
+.menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,5vw,72px)}
+.dish{padding:22px 0 26px;border-top:1px solid var(--line)}
+.dish h3{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.6vw,34px);margin:0 0 6px;letter-spacing:-.01em}
+.dish p{margin:0;color:var(--ink-soft);max-width:44ch}
+
+.ways{margin:0;max-width:980px}
+.ways > div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,2fr);gap:24px;padding:22px 0;border-top:1px solid var(--line);align-items:baseline}
+.ways dt{font-family:var(--display);font-size:23px}
+.ways .val{font-family:var(--display);font-style:italic;font-size:20px;color:var(--river)}
+.ways dd{margin:0;color:var(--ink-soft)}
+
+/* footer */
+.foot{position:relative;overflow:hidden;color:var(--film-fg);background:#141a1b}
+.foot video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(22px) saturate(1.3);transform:scale(1.2);opacity:.8}
+.foot::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,26,27,.2),rgba(20,26,27,.86))}
+.foot .in{position:relative;z-index:1;padding-block:clamp(110px,17vw,220px) calc(32px + env(safe-area-inset-bottom,0px))}
+.foot h2{font-family:var(--display);font-weight:300;font-size:clamp(54px,10vw,156px);line-height:.94;letter-spacing:-.03em;margin:0 0 30px;max-width:11ch}
+.foot .lede{color:rgba(247,241,232,.86)}
+.fnav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:clamp(64px,9vw,120px);padding-top:22px;border-top:1px solid rgba(247,241,232,.22);font-size:15px}
+.fnav nav{display:flex;flex-wrap:wrap;gap:8px 28px}
+.fnav a{text-decoration:none;opacity:.85}
+.fnav a:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
+.credits{margin-top:28px;font-size:12.5px;line-height:1.6;color:rgba(247,241,232,.6);max-width:110ch}
+.credits a{color:inherit}
+
+@media (max-width:760px){
+  .ch-head,.cols,.ways > div,.facts,.menu{grid-template-columns:minmax(0,1fr)}
+  .ch-head,.ways > div{gap:8px}
+  .chapter,.track,.stops{display:none}
+  .slide .credit{top:auto;bottom:calc(64px + env(safe-area-inset-bottom,0px));left:max(var(--gutter),env(safe-area-inset-left,0px));text-align:left}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  #giris,#rota{height:auto}
+  .stage{position:relative}
+  #giris .cap:not(:first-child){display:none}
+  #giris .hud{display:none}
+  #rota .stage{height:auto;overflow:visible}
+  #rota .slide{position:relative;height:100vh}
+  .stops{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top wrap" id="top">
+  <a class="brand" href="#giris" aria-label="Eskişehir, başa dön">
+    <svg viewBox="0 0 30 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M1 13h28"/><path d="M4 13c3-8 19-8 22 0"/><path d="M10 13v-4.6M15 13V7.2M20 13v-4.6"/><path d="M2 17c2-1.2 4-1.2 6 0s4 1.2 6 0 4-1.2 6 0 4 1.2 6 0" opacity=".55"/></svg>
+    Eskişehir
+  </a>
+  <span class="chapter" id="chapter">Porsuk üzerinde</span>
+  <a class="pill" href="#yol">Nasıl gidilir</a>
+</header>
+
+<main>
+<section class="film" id="giris" aria-label="Porsuk Çayı üzerinde gün batımı">
+  <div class="stage">
+    <canvas id="film" aria-hidden="true"></canvas>
+    <div class="caps wrap">
+      <div class="cap" data-in="-1" data-out=".19">
+        <h1>Eskişehir</h1>
+        <p>Adı eski, kendisi genç. <em>Porsuk'un iki yakasına kurulmuş bir şehir.</em></p>
+      </div>
+      <div class="cap" data-in=".26" data-out=".46">
+        <span class="when">Porsuk Çayı</span>
+        <h2>Şehir bir nehrin etrafında döner.</h2>
+        <p>Köprülerin altından kayıklar geçer, kıyılar akşamüstü dolar. Merkezde kaybolmak için nehri takip etmek yeter.</p>
+      </div>
+      <div class="cap" data-in=".52" data-out=".71">
+        <span class="when">Üç üniversite</span>
+        <h2>Her sonbahar yeniden gençleşir.</h2>
+        <p>Anadolu, Osmangazi ve Eskişehir Teknik üniversiteleriyle şehrin sokakları yılın büyük kısmında öğrencilerle dolu.</p>
+      </div>
+      <div class="cap" data-in=".77" data-out="1.1">
+        <span class="when">Kaydırmaya devam edin</span>
+        <h2>Sonra yol şehirden çıkar.</h2>
+        <p>Odunpazarı'nın cumbalı evlerinden Frig kayalarına uzanan on duraklık bir rota.</p>
+      </div>
+    </div>
+    <div class="hud wrap">
+      <span class="tc" id="tc">0:00,0 / 0:10,0</span>
+      <span class="track" aria-hidden="true"><b id="bar"></b></span>
+      <span class="load" id="load">Kaydırarak izleyin</span>
+    </div>
+  </div>
+</section>
+
+<section class="film" id="rota" aria-label="On duraklık Eskişehir rotası" data-chapter="Rota">
+  <div class="stage" id="rotaStage"></div>
+</section>
+
+<section class="ch wrap" id="rakamlar" data-chapter="Rakamlarla">
+  <div class="ch-head">
+    <span class="note">Rakamlarla</span>
+    <h2>Büyük bir şehir, <em>yürünecek ölçüde.</em></h2>
+  </div>
+  <div class="cols">
+    <span></span>
+    <dl class="facts">
+      <div class="hi"><dt>921.630</dt><dd>Büyükşehir nüfusu, 2024. Bunun büyük kısmı Odunpazarı ve Tepebaşı'nda yaşar.</dd></div>
+      <div><dt>788<small>m</small></dt><dd>Şehir merkezinin rakımı. Yazları serin akşamlar, kışları kar eksik olmaz.</dd></div>
+      <div><dt>55<small>km</small></dt><dd>Tramvay ağının uzunluğu. İlk sefer 24 Aralık 2004'te yapıldı.</dd></div>
+      <div><dt>67</dt><dd>Sivrihisar Ulu Camii'nin çatısını taşıyan ahşap direk sayısı.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="ch wrap" id="sofra" data-chapter="Sofra">
+  <div class="ch-head">
+    <span class="note">Sofra</span>
+    <h2>Çiböreği elle yenir, <em>sıcakken.</em></h2>
+  </div>
+  <div class="cols">
+    <span></span>
+    <div>
+      <p class="lede">Eskişehir mutfağı Kırım Tatarlarının, Balkan göçmenlerinin ve Anadolu köylerinin sofrasından beslenir.</p>
+      <div class="menu">
+        <div class="dish"><h3>Çibörek</h3><p>İnce hamurun içine kıyma ve soğan, kızgın yağda kabarana kadar kızartılır. Tatar mutfağından şehrin simgesine dönüşmüştür.</p></div>
+        <div class="dish"><h3>Balaban kebabı</h3><p>Közlenmiş köfte, tereyağlı ekmek, yoğurt ve domates sosu aynı tabakta.</p></div>
+        <div class="dish"><h3>Met helvası</h3><p>Yumurta akı ve şekerle çırpılan, ağızda dağılan beyaz bir helva. Sokak tezgâhlarında kesilerek satılır.</p></div>
+        <div class="dish"><h3>Haşhaşlı çörek</h3><p>Kat kat açılmış hamur, bolca haşhaş ezmesiyle. Kahvaltının ve çay saatinin değişmezi.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ch wrap" id="yol" data-chapter="Nasıl gidilir">
+  <div class="ch-head">
+    <span class="note">Nasıl gidilir</span>
+    <h2>Ankara ile İstanbul'un <em>tam ortasında.</em></h2>
+  </div>
+  <dl class="ways">
+    <div><dt>Ankara'dan</dt><span class="val">233 km</span><dd>Hızlı trenle yaklaşık bir buçuk saat. Tren doğrudan şehir merkezindeki gara iner.</dd></div>
+    <div><dt>İstanbul'dan</dt><span class="val">330 km</span><dd>Hızlı trenle ya da otoyoldan. Hafta sonu kaçamağı için en kolay şehirlerden biri.</dd></div>
+    <div><dt>Şehir içinde</dt><span class="val">Tramvay</span><dd>Otogar, gar, Odunpazarı ve üniversiteler aynı tramvay ağıyla birbirine bağlı.</dd></div>
+    <div><dt>Şehir dışında</dt><span class="val">Araçla</span><dd>Frig Vadisi, Seyitgazi ve Sivrihisar için araç kiralamak en rahatı. Üçü bir günlük turda birleşebilir.</dd></div>
+  </dl>
+</section>
+</main>
+
+<footer class="foot" id="son" data-chapter="Eskişehir">
+  <video src="loop.mp4" muted loop playsinline autoplay preload="metadata" aria-hidden="true"></video>
+  <div class="in wrap">
+    <h2>Bir hafta sonu yeter mi?</h2>
+    <p class="lede">Yetmez. Ama başlamak için iyi bir bahane.</p>
+    <div class="fnav">
+      <nav aria-label="Bölümler">
+        <a href="#rota">Rota</a>
+        <a href="#rakamlar">Rakamlarla</a>
+        <a href="#sofra">Sofra</a>
+        <a href="#yol">Nasıl gidilir</a>
+      </nav>
+      <a href="#giris">Başa dön</a>
+    </div>
+    <p class="credits" id="credits">Açılış videosu yapay zekâ ile üretilmiştir. Fotoğraflar Wikimedia Commons'tan, lisanslarına uygun olarak kullanılmıştır: </p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+  function prog(el){var t=el.offsetHeight-window.innerHeight;return clamp(-el.getBoundingClientRect().top/Math.max(t,1),0,1)}
+
+  /* ---------- route data ---------- */
+  var C='https://commons.wikimedia.org/wiki/File:';
+  var stops=[
+    {img:'odunpazari',name:'Odunpazarı',where:'Merkez, Odunpazarı',pos:'50% 55%',
+     text:'Cumbalı, renkli Osmanlı evleriyle şehrin eski yüzü. Konaklar, atölyeler ve dar sokaklar aynı yamaçta.',
+     cr:'Murat Özsoy 1958, CC BY-SA 4.0',src:'Odunpazarı,_Eskişehir,_Turkey_12.jpg'},
+    {img:'omm',name:'Odunpazarı Modern Müze',where:'Merkez, Odunpazarı',pos:'50% 50%',
+     text:'Kengo Kuma\'nın üst üste yığılmış ahşap kirişlerden tasarladığı müze 2019\'da açıldı. Semtin eski odun pazarına bir selam.',
+     cr:'Honacan, CC BY-SA 4.0',src:'Eskisehir_Odunpazari_Art_Museum.jpg'},
+    {img:'kursunlu',name:'Kurşunlu Külliyesi',where:'Merkez, Odunpazarı',pos:'50% 40%',
+     text:'1525\'te Çoban Mustafa Paşa için tamamlandı. Camisi, kervansarayları ve mevlevihanesiyle bugün de ayakta.',
+     cr:'Dosseman, CC BY-SA 4.0',src:'Eskişehir_Kurşunlu_Külliyesi_8503.jpg'},
+    {img:'luletasi',name:'Lületaşı',where:'Lületaşı Müzesi, Kurşunlu Külliyesi',pos:'50% 40%',
+     text:'Eskişehir\'in beyaz, yumuşak taşı. Topraktan çıktığı gibi oyulur; pipoya, takıya, heykele dönüşür.',
+     cr:'Dosseman, CC BY-SA 4.0',src:'Eskişehir_Meerschaum_Museum_in_2012_1671.jpg'},
+    {img:'tramvay',name:'Tramvay',where:'Şehir merkezi',pos:'62% 55%',
+     text:'2004\'ten beri yayalarla aynı caddeyi paylaşıyor. Şehrin bir ucundan öbürüne en kısa yol.',
+     cr:'Zeynel Cebeci, CC BY-SA 4.0',src:'Tram,_Eskişehir_02.jpg'},
+    {img:'masal-satosu',name:'Masal Şatosu',where:'Sazova Parkı, Tepebaşı',pos:'50% 45%',
+     text:'Sazova Parkı\'nın ortasında, mavi kuleleriyle şehrin en çok fotoğraflanan yapılarından biri.',
+     cr:'Sinan Şahin, CC BY 3.0',src:'Masal_Şatosu..._-_panoramio.jpg'},
+    {img:'seyitgazi',name:'Seyit Battal Gazi Külliyesi',where:'Seyitgazi, merkeze yaklaşık 45 km',pos:'50% 50%',
+     text:'Bir yamaca kurulmuş Selçuklu ve Osmanlı dönemi külliye. Halk anlatılarının kahramanı Battal Gazi\'ye adanmış.',
+     cr:'Zeynel Cebeci, CC BY-SA 4.0',src:'Mosque_and_Tomb,_Seyit_Battal_Gazi_Külliyesi.jpg'},
+    {img:'sivrihisar',name:'Sivrihisar Ulu Camii',where:'Sivrihisar, merkeze yaklaşık 100 km',pos:'50% 50%',
+     text:'1232\'de yapılan caminin çatısını 67 ahşap direk taşır. 2023\'ten beri UNESCO Dünya Mirası listesinde. Nasreddin Hoca da bu ilçenin çocuğu.',
+     cr:'Dosseman, CC BY-SA 4.0',src:'Sivrihisar_Ulu_Camii_2047.jpg'},
+    {img:'frig-vadisi',name:'Frig Vadisi',where:'Han ve Seyitgazi arası',pos:'45% 50%',
+     text:'Volkanik tüf kayalara oyulmuş mezarlar, sunaklar ve kale kalıntıları. Yürüyüş ve bisiklet rotalarıyla geçilir.',
+     cr:'Zeynel Cebeci, CC BY-SA 4.0',src:'Cliffs,_Phrygian_Valley.jpg'},
+    {img:'midas',name:'Midas Anıtı',where:'Yazılıkaya, Han',pos:'35% 50%',
+     text:'MÖ 7. yüzyıldan kalma, 17 metrelik kaya cephesi. Üzerindeki Frig yazıtında Midas\'ın adı geçer.',
+     cr:'Thecatcherintherye, CC BY-SA 4.0',src:'Yazılıkaya_Midas_Anıtı.jpg'}
+  ];
+
+  /* ---------- build route ---------- */
+  var rota=document.getElementById('rota'), rs=document.getElementById('rotaStage');
+  rota.style.setProperty('--n',stops.length);
+  var html='';
+  stops.forEach(function(s,i){
+    html+='<figure class="slide" data-i="'+i+'"><img src="img/'+s.img+'.webp" alt="'+s.name+', '+s.where+'" style="object-position:'+s.pos+'" '+(i>1?'loading="lazy" ':'')+'decoding="async">'+
+      '<figcaption class="wrap"><span class="where">'+s.where+'</span><h3>'+s.name+'</h3><p>'+s.text+'</p></figcaption>'+
+      '<span class="credit">Fotoğraf: '+s.cr+'</span></figure>';
+  });
+  html+='<ol class="stops" aria-label="Duraklar">'+stops.map(function(s,i){return '<li><span>'+(i+1)+'</span>'+s.name+'</li>'}).join('')+'</ol>';
+  rs.innerHTML=html;
+  var slides=[].slice.call(rs.querySelectorAll('.slide')), dots=[].slice.call(rs.querySelectorAll('.stops li'));
+  document.getElementById('credits').insertAdjacentHTML('beforeend',stops.map(function(s){return '<a href="'+C+s.src+'" target="_blank" rel="noopener">'+s.name+'</a> ('+s.cr+')'}).join(', ')+'.');
+
+  /* ---------- drone film: frame sequence on canvas ---------- */
+  var N=120, FPS=12, DUR=10;
+  var film=document.getElementById('giris'), cv=document.getElementById('film'), ctx=cv.getContext('2d');
+  var caps=[].slice.call(film.querySelectorAll('.cap'));
+  var tc=document.getElementById('tc'), bar=document.getElementById('bar'), load=document.getElementById('load');
+  var imgs=new Array(N), ready=new Array(N), loaded=0, cur=0, drawn=-1;
+  function src(i){return 'frames/f'+String(i+1).padStart(3,'0')+'.webp'}
+  function get(i){
+    if(imgs[i])return;
+    var im=new Image(); im.decoding='async'; imgs[i]=im;
+    im.onload=function(){ready[i]=true;loaded++;drawn=-1;
+      load.textContent=loaded<N?'Film yükleniyor, %'+Math.round(loaded/N*100):'Kaydırarak izleyin'};
+    im.src=src(i);
+  }
+  get(0);
+  if(!reduce){for(var s=8;s>=1;s=s>>1){for(var i=0;i<N;i+=s)get(i)}}
+  function size(){var d=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(cv.clientWidth*d);cv.height=Math.round(cv.clientHeight*d);drawn=-1}
+  window.addEventListener('resize',size);size();
+  function nearest(i){for(var o=0;o<N;o++){if(ready[i-o])return i-o;if(ready[i+o])return i+o}return -1}
+  function draw(i){
+    var j=nearest(i); if(j<0||j===drawn)return; drawn=j;
+    var im=imgs[j], cw=cv.width, ch=cv.height, r=Math.max(cw/im.naturalWidth,ch/im.naturalHeight);
+    var w=im.naturalWidth*r, h=im.naturalHeight*r;
+    ctx.drawImage(im,(cw-w)/2,(ch-h)/2,w,h);
+  }
+  function fmt(t){var s=Math.floor(t),d=Math.floor((t-s)*10);return '0:'+String(s).padStart(2,'0')+','+d}
+
+  /* ---------- loop ---------- */
+  var top=document.getElementById('top'), foot=document.getElementById('son'), lastStop=-1, rp=0;
+  function frame(){
+    var p=reduce?0:prog(film);
+    cur+=(p*(N-1)-cur)*.16;
+    draw(Math.round(cur));
+    tc.textContent=fmt(Math.min(cur/FPS,DUR))+' / '+fmt(DUR);
+    bar.style.transform='scaleX('+p+')';
+    if(!reduce){
+      caps.forEach(function(c){
+        var a=+c.dataset.in,b=+c.dataset.out,f=.045;
+        var o=clamp(Math.min((p-a)/f,(b-p)/f),0,1);
+        c.style.opacity=o;c.style.transform='translateY('+((1-o)*22)+'px)';c.style.visibility=o>0?'visible':'hidden';
+      });
+      // route: each stop owns an equal slice; crossfade at the seams, slow push-in inside
+      var q=prog(rota); rp+=(q-rp)*.18;
+      var k=rp*stops.length, idx=Math.min(stops.length-1,Math.floor(k));
+      slides.forEach(function(el,i){
+        var local=k-i;                         // 0..1 while this stop is current
+        var o=i===0?clamp(1-(local-1)/.18,0,1):clamp(Math.min((local+.18)/.18,1-(local-1)/.18),0,1);
+        if(i===stops.length-1)o=clamp((local+.18)/.18,0,1);
+        el.style.opacity=o; el.style.visibility=o>0?'visible':'hidden'; el.style.zIndex=i;
+        var img=el.firstChild, cap=img.nextSibling;
+        img.style.transform='scale('+(1.14-.12*clamp(local,0,1))+')';
+        var co=clamp(Math.min((local-.08)/.12,(.92-local)/.12),0,1);
+        if(i===0&&local<.08)co=1; if(i===stops.length-1&&local>.92)co=1;
+        cap.style.opacity=co; cap.style.transform='translateY('+((1-co)*20)+'px)';
+      });
+      if(idx!==lastStop){dots.forEach(function(d,i){d.classList.toggle('on',i===idx)});lastStop=idx}
+    }
+    var fr=film.getBoundingClientRect(), rr=rota.getBoundingClientRect(), fo=foot.getBoundingClientRect();
+    top.classList.toggle('paper',rr.bottom<70 && fo.top>70);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* ---------- chapter label ---------- */
+  var chapter=document.getElementById('chapter');
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)chapter.textContent=e.target.dataset.chapter})},{rootMargin:'-45% 0px -50% 0px'});
+  [].forEach.call(document.querySelectorAll('[data-chapter]'),function(s){io.observe(s)});
+  new IntersectionObserver(function(es){if(es[0].isIntersecting)chapter.textContent='Porsuk üzerinde'},{rootMargin:'-45% 0px -50% 0px'}).observe(film);
+  new IntersectionObserver(function(es){if(es[0].isIntersecting&&lastStop>=0)chapter.textContent='Rota'},{rootMargin:'-45% 0px -50% 0px'}).observe(rota);
+})();
+</script>
+</body>
+</html>
